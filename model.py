@@ -23,10 +23,11 @@ csv_path1 = 'data/driving_log.csv'  # udacity data (fastest graphic mode)
 
 center_db, left_db, right_db, steer_db = [], [], [], []
 Rows, Cols = 64, 64
-offset = 0.22
+#offset = 0.22
+offset = 0.10
 
 # read csv file
-with open(csv_path1) as csvfile:
+with open(csv_path) as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         if float(row['steering']) != 0.0:
