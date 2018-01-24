@@ -83,6 +83,8 @@ def valid_img(valid_image, valid_steer, num):
 def crop_img(image):
     """ crop unnecessary parts """
     cropped_img = image[63:136, 0:319]
+    #cv2.imshow('image', cropped_img)
+    #cv2.waitKey(0)
     resized_img = cv2.resize(cropped_img, (Cols, Rows), cv2.INTER_AREA)
     img = cv2.cvtColor(resized_img, cv2.COLOR_BGR2RGB)
     return resized_img
