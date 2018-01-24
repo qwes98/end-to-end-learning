@@ -180,6 +180,24 @@ def network_model():
     model.add(Dense(64, activation='relu', name='FC3'))
     model.add(Dense(1))
     model.summary()
+    
+    """ How_to~ model
+    model = Sequential()
+    model.add(Lambda(lambda x: x / 127.5 - 1.0, input_shape=(Rows, Cols, 3)))
+    model.add(Convolution2D(24, 5, 5, activation='elu', subsample=(2, 2)))
+    model.add(Convolution2D(36, 5, 5, activation='elu', subsample=(2, 2)))
+    model.add(Convolution2D(48, 5, 5, activation='elu', subsample=(2, 2)))
+    model.add(Convolution2D(64, 3, 3, activation='elu'))
+    model.add(Convolution2D(64, 3, 3, activation='elu'))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(100, activation='elu'))
+    model.add(Dense(50, activation='elu'))
+    model.add(Dense(10, activation='elu'))
+    model.add(Dense(1))
+    model.summary()
+    """
+    
     return model
 
 def generate_train(center, left, right, steer):
@@ -236,13 +254,14 @@ def generate_train_batch(center, left, right, steering, batch_size):
 
 batch_size = 256
 epoch = 10
+learning_rate = 0.0001
 
 train_generator = generate_train_batch(center_db, left_db, right_db, steer_db, batch_size)
 image_val, steer_val = generate_valid(img_valid, steer_valid)
 
 model = network_model()
 
-adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+adam = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(optimizer=adam, loss='mse')
 
 model_json = 'model.json'
