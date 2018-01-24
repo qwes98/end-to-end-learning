@@ -19,12 +19,15 @@ import json
 import gc
 
 csv_path = 'driving_log.csv'  # my data (fantastic graphic mode)
-csv_path1 = 'data/driving_log.csv'  # udacity data (fastest graphic mode)
+#csv_path1 = 'data/driving_log.csv'  # udacity data (fastest graphic mode)
 
 center_db, left_db, right_db, steer_db = [], [], [], []
 Rows, Cols = 64, 64
 #offset = 0.22
-offset = 0.10
+offset = 0.10	# this value is good for me - Jiwon Park
+#num = 0	# to use all learning data - Jiwon Park
+#max_num = 0	# to use all learning data - Jiwon Park
+
 
 # read csv file
 with open(csv_path) as csvfile:
@@ -42,6 +45,8 @@ with open(csv_path) as csvfile:
                 left_db.append(row['left'].strip())
                 right_db.append(row['right'].strip())
                 steer_db.append(float(row['steering']))
+
+#max_num = len(center_db)	# to use all learning data - Jiwon Park
 
 # shuffle a dataset
 center_db, left_db, right_db, steer_db = shuffle(center_db, left_db, right_db, steer_db)
@@ -83,7 +88,8 @@ def valid_img(valid_image, valid_steer, num):
 def crop_img(image):
     """ crop unnecessary parts """
     cropped_img = image[63:136, 0:319]
-    #cv2.imshow('image', cropped_img)
+    #cv2.imshow('origin', image)
+    #cv2.imshow('cropped_img', cropped_img)
     #cv2.waitKey(0)
     resized_img = cv2.resize(cropped_img, (Cols, Rows), cv2.INTER_AREA)
     img = cv2.cvtColor(resized_img, cv2.COLOR_BGR2RGB)
@@ -209,7 +215,7 @@ def generate_train(center, left, right, steer):
     transformed image & crop
     """
 
-    num = np.random.randint(0, len(steer))
+    num = np.random.randint(0, len(steer))	# randomly choose input image and data - Jiwon Park
     # to avoid bias in straight angle
     #bal = True
     #while bal:
@@ -222,7 +228,14 @@ def generate_train(center, left, right, steer):
     #    else:
     #        bal = False
 
+    #global num		# to use all learning data - Jiwon Park
     image, steering = select_img(center, left, right, steer, num, offset)
+    ''' to use all learning data - Jiwon Park
+    if(num >= max_num - 1):
+        num = 0
+    else:
+        num += 1
+    '''
 
     image, steering = shift_img(image, steering)
     image, steering = flip_img(image, steering)
