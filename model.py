@@ -59,6 +59,14 @@ plt.xlabel('steering value')
 plt.ylabel('counts')
 # plt.show()
 
+def binary_img(image):
+    """ get lane from image """
+    gray_img = cv2.cvtColor(image, cv2.COLOR_RBG2GRAY)
+    cv2.imshow('origin', image)
+    cv2.imshow('gray_image', gray_image)
+    cv2.waitKey(0)
+    #return gray_img
+
 def select_img(center, left, right, steer, num, offsets=0.22):
     """
     randomly select among center, left, right images
